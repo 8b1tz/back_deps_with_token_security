@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 public class AutenticacaoController {
-    
+
     @Autowired
     private UserRepository repository;
     @Autowired
@@ -34,11 +34,14 @@ public class AutenticacaoController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenDto> autenticar(@RequestBody LoginForm form) {
+
         UsernamePasswordAuthenticationToken dadosLogin = form.converter();
         try {
             Authentication authentication = this.authManager.authenticate(dadosLogin);
             String token = this.tokenService.gerarToken(authentication);
-            return ResponseEntity.ok(new TokenDto(token, "Bearer"));
+            User user = (User) authentication.getPrincipal();
+            TokenDto tokenDto = new TokenDto(token, user);
+            return ResponseEntity.ok(tokenDto);
         } catch (AuthenticationException var5) {
             return ResponseEntity.badRequest().build();
         }
@@ -50,4 +53,5 @@ public class AutenticacaoController {
         repository.save(user);
         return ResponseEntity.ok(user);
     }
+
 }

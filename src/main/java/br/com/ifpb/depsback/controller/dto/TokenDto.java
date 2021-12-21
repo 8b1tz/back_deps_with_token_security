@@ -1,16 +1,19 @@
 package br.com.ifpb.depsback.controller.dto;
 
-public class TokenDto {
-    private String tipo;
-    private String token;
+import br.com.ifpb.depsback.model.User;
 
-    public TokenDto(String token, String tipo) {
-        this.tipo = tipo;
+public class TokenDto {
+    private String token;
+    private User user;
+
+    public TokenDto(String token, User user) {
+
         this.token = token;
+        this.user = user;
     }
 
-    public String getTipo() {
-        return tipo;
+    public User getUser() {
+        return user;
     }
 
     public String getToken() {

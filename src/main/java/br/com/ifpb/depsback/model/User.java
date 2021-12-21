@@ -17,7 +17,6 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique=true)
     private String name;
     @Column(unique=true)
     private String email;
@@ -25,7 +24,7 @@ public class User implements UserDetails {
     @ManyToMany(fetch =  FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany
     @JsonManagedReference
     private List<Event> events;
 
