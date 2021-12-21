@@ -1,6 +1,7 @@
 package br.com.ifpb.depsback.config.security;
 
 import br.com.ifpb.depsback.model.User;
+import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,10 +12,12 @@ import java.util.Date;
 
 @Service
 public class TokenService {
-    @Value("${jwt.expiration}")
+
+    @Value("${forum.jwt.expiration}")
     private String expiration;
-    @Value("${jwt.secret}")
+    @Value("${forum.jwt.secret}")
     private String secret;
+
     public String gerarToken(Authentication authentication){
         User logado = (User) authentication.getPrincipal();
         Date hoje = new Date();
@@ -26,5 +29,15 @@ public class TokenService {
                 .setExpiration(dataExpiracao)
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
+    }
+
+    public boolean isTokenValido(String token) {
+        try {
+            Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token);
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -11,11 +11,11 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Table(name = "user")
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
     private Long id;
     private String name;
     @Column(unique=true)
@@ -24,7 +24,7 @@ public class User implements UserDetails {
     @ManyToMany(fetch =  FetchType.EAGER)
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     @JsonManagedReference
     private List<Event> events;
 

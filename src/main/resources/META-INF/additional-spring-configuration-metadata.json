@@ -1,13 +1,13 @@
 {
   "properties": [
     {
-      "name": "jwt.expiration",
+      "name": "forum.jwt.expiration",
       "type": "java.lang.String",
-      "description": "Description for jwt.expiration."
+      "description": "Description for forum.jwt.expiration."
     },
     {
-      "name": "jwt.secret",
+      "name": "forum.jwt.secret",
       "type": "java.lang.String",
-      "description": "Description for jwt.secret."
+      "description": "Description for forum.jwt.secret."
     }
   ] }

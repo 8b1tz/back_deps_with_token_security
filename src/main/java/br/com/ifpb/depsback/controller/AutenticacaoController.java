@@ -18,22 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/login")
 public class AutenticacaoController {
 
     @Autowired
     private AuthenticationManager authManager;
     @Autowired
     private TokenService tokenService;
-    @PostMapping
-    public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form){
+
+    @PostMapping("login")
+    public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form) {
         UsernamePasswordAuthenticationToken dadosLogin = form.converter();
         try {
-            Authentication authentication = authManager.authenticate(dadosLogin);
-            String token = tokenService.gerarToken(authentication);
+            Authentication authentication = this.authManager.authenticate(dadosLogin);
+            String token = this.tokenService.gerarToken(authentication);
             return ResponseEntity.ok(new TokenDto(token, "Bearer"));
-        }catch (AuthenticationException e){
-            return  ResponseEntity.badRequest().build();
+        } catch (AuthenticationException var5) {
+            return ResponseEntity.badRequest().build();
         }
     }
+
 }
