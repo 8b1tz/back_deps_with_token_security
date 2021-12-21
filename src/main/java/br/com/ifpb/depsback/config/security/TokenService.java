@@ -1,6 +1,7 @@
 package br.com.ifpb.depsback.config.security;
 
 import br.com.ifpb.depsback.model.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -39,5 +40,10 @@ public class TokenService {
         catch (Exception e) {
             return false;
         }
+    }
+
+    public Long getIdUser(String token) {
+        Claims body = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
+        return Long.parseLong(body.getSubject());
     }
 }

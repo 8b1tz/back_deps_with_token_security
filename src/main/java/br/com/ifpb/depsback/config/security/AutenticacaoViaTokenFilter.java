@@ -2,6 +2,8 @@ package br.com.ifpb.depsback.config.security;
 
 import br.com.ifpb.depsback.model.User;
 import br.com.ifpb.depsback.repository.UserRepository;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -26,17 +28,25 @@ public class AutenticacaoViaTokenFilter extends OncePerRequestFilter {
 
         String token = recuperarToken(request);
         boolean valido = tokenService.isTokenValido(token);
-
+        if (valido){
+            autenticarCliente(token);
+        }
         filterChain.doFilter(request, response);
+    }
+
+    private void autenticarCliente(String token) {
+        Long idUser = tokenService.getIdUser(token);
+        User user = userRepository.findById(idUser).get();
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     private String recuperarToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        if (token == null || token.isEmpty()) {
+        if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
             return null;
         }
 
-        System.out.println(token);
-        return null;
+        return token.substring(7, token.length());
     }
 }
