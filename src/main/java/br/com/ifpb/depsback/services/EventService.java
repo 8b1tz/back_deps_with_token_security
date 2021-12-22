@@ -19,12 +19,14 @@ public class EventService {
     private UserRepository userRepository;
 
     public Event create(Event event, long idUser) {
+        Event newEvent = eventRepository.save(event);
+
         User user = userRepository.findById(idUser).get();
-        event.setUser(user);
-        user.addEvent(event);
-        eventRepository.save(event);
+        newEvent.setUser(user);
+        user.addEvent(newEvent);
+        eventRepository.save(newEvent);
         userRepository.save(user);
-        return event;
+        return newEvent;
 
     }
 
