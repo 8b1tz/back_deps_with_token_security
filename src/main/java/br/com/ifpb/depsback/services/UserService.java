@@ -28,7 +28,6 @@ public class UserService {
         User userDb = this.findById(idUser);
         userDb.setName(user.getName());
         userDb.setEmail(user.getEmail());
-        userDb.setPassword(user.getPassword());
         User userAtualizado = userRepository.save(userDb);
         return userAtualizado;
     }
